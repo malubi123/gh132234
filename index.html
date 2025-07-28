@@ -14,7 +14,7 @@
   const heldKeys = new Set();
 
   function sendCommand(command) {
-    fetch("http://127.0.0.1:5100/send-command", {
+    fetch("https://5b8cd44994d7.ngrok-free.app/send-command", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ command: command })
