@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sterowanie NPC</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    h1 { font-size: 2rem; }
+  </style>
+</head>
+<body>
+  <h1>WASD + Spacja = Steruj NPC!</h1>
+  <p>(Kamera NPC-a będzie w oknie Roblox lub przez stream)</p>
+<script>
+  const heldKeys = new Set();
+
+  function sendCommand(command) {
+    fetch("http://127.0.0.1:5100/send-command", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ command: command })
+    });
+  }
+
+document.addEventListener("keydown", (event) => {
+  const key = event.key.toLowerCase();
+  if (heldKeys.has(key)) return;
+
+  heldKeys.add(key);
+
+
+    if (heldKeys.has('w') && heldKeys.has('d')) {
+    sendCommand("WD");
+    return; // żeby nie wysyłać innych komend przy tym wciśnięciu
+  }
+
+    if (heldKeys.has('w') && heldKeys.has('a')) {
+    sendCommand("WA");
+    return; // żeby nie wysyłać innych komend przy tym wciśnięciu
+  }
+
+      if (heldKeys.has('s') && heldKeys.has('d')) {
+    sendCommand("SD");
+    return; // żeby nie wysyłać innych komend przy tym wciśnięciu
+  }
+
+        if (heldKeys.has('s') && heldKeys.has('a')) {
+    sendCommand("SA");
+    return; // żeby nie wysyłać innych komend przy tym wciśnięciu
+  }
+
+
+
+
+  let command = "IDLE";
+  if (key === "w") command = "W";
+  else if (key === "s") command = "S";
+  else if (key === "a") command = "A";
+  else if (key === "d") command = "D";
+  else if (key === " ") command = "SPACE";
+
+  sendCommand(command);
+});
+
+document.addEventListener("keyup", (event) => {
+  const key = event.key.toLowerCase();
+  heldKeys.delete(key);
+
+  // Jeśli żaden klawisz nie jest już trzymany – resetuj komendę
+  if (heldKeys.size === 0) {
+    sendCommand("...");
+  }
+});
+</script>
+
+</body>
+</html>
